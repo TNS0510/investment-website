@@ -1,4 +1,3 @@
-
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
@@ -77,8 +76,6 @@ const app = express();
 const PORT = parseInt(process.env.PORT) || 5000;
 
 // ─── Upload Directory ─────────────────────────────────────────────────────────
-// UPLOADS_PATH env var points to a persistent volume in production (e.g. /data/uploads).
-// Falls back to a local uploads/ directory for development.
 const UPLOADS_ROOT  = process.env.UPLOADS_PATH || path.join(__dirname, 'uploads');
 const FRONTEND_DIR  = path.join(__dirname, '..');
 
@@ -99,7 +96,6 @@ const MIME_TO_EXT = {
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
-// Multer file filter — rejects any MIME type not in the whitelist
 function fileFilter(req, file, cb) {
     if (ALLOWED_MIME_TYPES.has(file.mimetype)) {
         cb(null, true);
@@ -108,7 +104,6 @@ function fileFilter(req, file, cb) {
     }
 }
 
-// Create a disk-storage engine for a given sub-directory
 function createStorage(subDir) {
     return multer.diskStorage({
         destination(req, file, cb) {
@@ -123,7 +118,6 @@ function createStorage(subDir) {
     });
 }
 
-// Multer instances — one per form, scoped to named fields only
 const uploadYieldmax = multer({
     storage: createStorage('yieldmax'),
     fileFilter,
@@ -147,25 +141,22 @@ const uploadLoan = multer({
     { name: 'fileSupplemental', maxCount: 1 }
 ]);
 
-// Promisify multer middleware so async route handlers can await it
 function runMulter(middleware, req, res) {
     return new Promise((resolve, reject) => {
         middleware(req, res, (err) => (err ? reject(err) : resolve()));
     });
 }
 
-// Safely extract the relative upload path for a named file field
 function filePath(req, fieldName) {
     const file = req.files?.[fieldName]?.[0];
     if (!file) return null;
-    // Store path relative to UPLOADS_ROOT's parent so links resolve as /uploads/...
     return path.relative(path.dirname(UPLOADS_ROOT), file.path).replace(/\\/g, '/');
 }
 
 // ─── Rate Limiters ────────────────────────────────────────────────────────────
 const loginLimiter = rateLimit({
-    windowMs:         15 * 60 * 1000, // 15-minute window
-    max:              5,               // max 5 attempts per IP per window
+    windowMs:         15 * 60 * 1000,
+    max:              5,
     standardHeaders:  true,
     legacyHeaders:    false,
     message:          { success: false, message: 'Too many login attempts. Please try again in 15 minutes.' }
@@ -191,7 +182,7 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '50kb' }));
 
-// 5. YIELDMAX SUBMISSION ROUTE: Accepts multipart/form-data, stores files + text fields
+// 5. YIELDMAX SUBMISSION ROUTE
 app.post('/api/submit/yieldmax', async (req, res) => {
     try {
         await runMulter(uploadYieldmax, req, res);
@@ -208,8 +199,7 @@ app.post('/api/submit/yieldmax', async (req, res) => {
 
     try {
         const d = req.body;
-
-        const sql = `
+        const stmt = db.prepare(`
             INSERT INTO yieldmax_applications (
                 submitted_at, title, surname, firstname, othername,
                 gender, dob, phone, email, address, nin, bvn,
@@ -229,7 +219,7 @@ app.post('/api/submit/yieldmax', async (req, res) => {
                 ?, ?, ?, ?,
                 ?, ?, ?, ?, ?
             )
-        `;
+        `);
 
         const params = [
             new Date().toISOString(),
@@ -268,14 +258,9 @@ app.post('/api/submit/yieldmax', async (req, res) => {
             filePath(req, 'doc4File')
         ];
 
-        db.run(sql, params, function(err) {
-            if (err) {
-                console.error('YieldMax DB insertion failure:', err.message);
-                return res.status(500).json({ success: false, message: 'Database save error.' });
-            }
-            console.log(`YieldMax application saved — row ID: ${this.lastID}`);
-            res.status(200).json({ success: true, id: this.lastID, message: 'YieldMax application saved successfully.' });
-        });
+        const info = stmt.run(...params);
+        console.log(`YieldMax application saved — row ID: ${info.lastInsertRowid}`);
+        res.status(200).json({ success: true, id: info.lastInsertRowid, message: 'YieldMax application saved successfully.' });
 
     } catch (error) {
         console.error('YieldMax route error:', error);
@@ -283,7 +268,7 @@ app.post('/api/submit/yieldmax', async (req, res) => {
     }
 });
 
-// 7. LOAN SUBMISSION ROUTE: Accepts multipart/form-data, stores files + text fields
+// 7. LOAN SUBMISSION ROUTE
 app.post('/api/submit/loan', async (req, res) => {
     try {
         await runMulter(uploadLoan, req, res);
@@ -300,8 +285,7 @@ app.post('/api/submit/loan', async (req, res) => {
 
     try {
         const d = req.body;
-
-        const sql = `
+        const stmt = db.prepare(`
             INSERT INTO loan_applications (
                 submitted_at, loanType,
                 surname, middleName, firstName, email, gender, bvn, nin,
@@ -321,7 +305,7 @@ app.post('/api/submit/loan', async (req, res) => {
                 ?, ?, ?, ?,
                 ?, ?, ?, ?
             )
-        `;
+        `);
 
         const params = [
             new Date().toISOString(),
@@ -354,14 +338,9 @@ app.post('/api/submit/loan', async (req, res) => {
             filePath(req, 'fileSupplemental')
         ];
 
-        db.run(sql, params, function(err) {
-            if (err) {
-                console.error('Loan DB insertion failure:', err.message);
-                return res.status(500).json({ success: false, message: 'Database save error.' });
-            }
-            console.log(`Loan application saved — row ID: ${this.lastID}`);
-            res.status(200).json({ success: true, id: this.lastID, message: 'Loan application saved successfully.' });
-        });
+        const info = stmt.run(...params);
+        console.log(`Loan application saved — row ID: ${info.lastInsertRowid}`);
+        res.status(200).json({ success: true, id: info.lastInsertRowid, message: 'Loan application saved successfully.' });
 
     } catch (error) {
         console.error('Loan route error:', error);
@@ -369,15 +348,14 @@ app.post('/api/submit/loan', async (req, res) => {
     }
 });
 
-// 8. INQUIRY SUBMISSION ROUTE: Stores a homepage contact / inquiry form submission
+// 8. INQUIRY SUBMISSION ROUTE
 app.post('/api/submit/inquiry', (req, res) => {
     try {
         const d = req.body;
-
-        const sql = `
+        const stmt = db.prepare(`
             INSERT INTO inquiries (submitted_at, fullName, email, inquiryType, message)
             VALUES (?, ?, ?, ?, ?)
-        `;
+        `);
 
         const params = [
             new Date().toISOString(),
@@ -387,14 +365,9 @@ app.post('/api/submit/inquiry', (req, res) => {
             d.message      || null
         ];
 
-        db.run(sql, params, function(err) {
-            if (err) {
-                console.error('Inquiry DB insertion failure:', err.message);
-                return res.status(500).json({ success: false, message: 'Database save error.' });
-            }
-            console.log(`Inquiry saved — row ID: ${this.lastID}`);
-            res.status(200).json({ success: true, id: this.lastID, message: 'Inquiry saved successfully.' });
-        });
+        const info = stmt.run(...params);
+        console.log(`Inquiry saved — row ID: ${info.lastInsertRowid}`);
+        res.status(200).json({ success: true, id: info.lastInsertRowid, message: 'Inquiry saved successfully.' });
 
     } catch (error) {
         console.error('Inquiry route error:', error);
@@ -402,7 +375,7 @@ app.post('/api/submit/inquiry', (req, res) => {
     }
 });
 
-// 9. ADMIN LOGIN ROUTE: Validates credentials and issues a signed token
+// 9. ADMIN LOGIN ROUTE
 app.post('/api/admin/login', loginLimiter, (req, res) => {
     try {
         const { username, password } = req.body || {};
@@ -410,7 +383,6 @@ app.post('/api/admin/login', loginLimiter, (req, res) => {
             return res.status(400).json({ success: false, message: 'Username and password are required.' });
         }
 
-        // Pad both sides to equal length before timingSafeEqual to avoid length-leak
         const usernameMatch = (() => {
             try {
                 const a = Buffer.from(String(username).padEnd(64));
@@ -439,34 +411,24 @@ app.post('/api/admin/login', loginLimiter, (req, res) => {
     }
 });
 
-// 10. LEGACY ADMINISTRATIVE ROUTE: Protected — legacy applications table
+// 10. LEGACY ADMINISTRATIVE ROUTE
 app.get('/api/applications', requireAuth, (req, res) => {
     try {
-        db.all("SELECT * FROM applications ORDER BY id DESC", [], (err, rows) => {
-            if (err) {
-                console.error('DB retrieval error (applications):', err.message);
-                return res.status(500).json({ success: false, message: 'Database read error.' });
-            }
-            res.status(200).json(rows);
-        });
+        const rows = db.prepare("SELECT * FROM applications ORDER BY id DESC").all();
+        res.status(200).json(rows);
     } catch (error) {
         console.error('GET /api/applications error:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 });
 
-// 11. LEGACY STATUS UPDATE: Protected — legacy applications table
+// 11. LEGACY STATUS UPDATE
 app.patch('/api/applications/:id', requireAuth, (req, res) => {
     try {
         const { id } = req.params;
         const { status } = req.body;
-        db.run("UPDATE applications SET status = ? WHERE id = ?", [status, id], function(err) {
-            if (err) {
-                console.error('DB update error (applications):', err.message);
-                return res.status(500).json({ success: false, message: 'Database update error.' });
-            }
-            res.status(200).json({ success: true, message: 'Status updated.' });
-        });
+        db.prepare("UPDATE applications SET status = ? WHERE id = ?").run(status, id);
+        res.status(200).json({ success: true, message: 'Status updated.' });
     } catch (error) {
         console.error('PATCH /api/applications/:id error:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
@@ -477,72 +439,69 @@ app.patch('/api/applications/:id', requireAuth, (req, res) => {
 
 // 12. GET YIELDMAX APPLICATIONS
 app.get('/api/admin/yieldmax', requireAuth, (req, res) => {
-    db.all("SELECT * FROM yieldmax_applications ORDER BY id DESC", [], (err, rows) => {
-        if (err) {
-            console.error('DB retrieval error (yieldmax):', err.message);
-            return res.status(500).json({ success: false, message: 'Database read error.' });
-        }
+    try {
+        const rows = db.prepare("SELECT * FROM yieldmax_applications ORDER BY id DESC").all();
         res.status(200).json(rows);
-    });
+    } catch (error) {
+        console.error('DB retrieval error (yieldmax):', error);
+        res.status(500).json({ success: false, message: 'Database read error.' });
+    }
 });
 
 // 13. UPDATE YIELDMAX APPLICATION STATUS
 app.patch('/api/admin/yieldmax/:id', requireAuth, (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
-    db.run("UPDATE yieldmax_applications SET status = ? WHERE id = ?", [status, id], function(err) {
-        if (err) {
-            console.error('DB update error (yieldmax):', err.message);
-            return res.status(500).json({ success: false, message: 'Database update error.' });
-        }
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        db.prepare("UPDATE yieldmax_applications SET status = ? WHERE id = ?").run(status, id);
         res.status(200).json({ success: true, message: 'Status updated.' });
-    });
+    } catch (error) {
+        console.error('DB update error (yieldmax):', error);
+        res.status(500).json({ success: false, message: 'Database update error.' });
+    }
 });
 
 // 14. GET LOAN APPLICATIONS
 app.get('/api/admin/loans', requireAuth, (req, res) => {
-    db.all("SELECT * FROM loan_applications ORDER BY id DESC", [], (err, rows) => {
-        if (err) {
-            console.error('DB retrieval error (loans):', err.message);
-            return res.status(500).json({ success: false, message: 'Database read error.' });
-        }
+    try {
+        const rows = db.prepare("SELECT * FROM loan_applications ORDER BY id DESC").all();
         res.status(200).json(rows);
-    });
+    } catch (error) {
+        console.error('DB retrieval error (loans):', error);
+        res.status(500).json({ success: false, message: 'Database read error.' });
+    }
 });
 
 // 15. UPDATE LOAN APPLICATION STATUS
 app.patch('/api/admin/loans/:id', requireAuth, (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
-    db.run("UPDATE loan_applications SET status = ? WHERE id = ?", [status, id], function(err) {
-        if (err) {
-            console.error('DB update error (loans):', err.message);
-            return res.status(500).json({ success: false, message: 'Database update error.' });
-        }
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        db.prepare("UPDATE loan_applications SET status = ? WHERE id = ?").run(status, id);
         res.status(200).json({ success: true, message: 'Status updated.' });
-    });
+    } catch (error) {
+        console.error('DB update error (loans):', error);
+        res.status(500).json({ success: false, message: 'Database update error.' });
+    }
 });
 
-// 16. GET INQUIRIES (read-only — no status column)
+// 16. GET INQUIRIES
 app.get('/api/admin/inquiries', requireAuth, (req, res) => {
-    db.all("SELECT * FROM inquiries ORDER BY id DESC", [], (err, rows) => {
-        if (err) {
-            console.error('DB retrieval error (inquiries):', err.message);
-            return res.status(500).json({ success: false, message: 'Database read error.' });
-        }
+    try {
+        const rows = db.prepare("SELECT * FROM inquiries ORDER BY id DESC").all();
         res.status(200).json(rows);
-    });
+    } catch (error) {
+        console.error('DB retrieval error (inquiries):', error);
+        res.status(500).json({ success: false, message: 'Database read error.' });
+    }
 });
 
 // ─── Static File Serving ──────────────────────────────────────────────────────
-// Serve uploaded documents (no directory listing)
 app.use('/uploads', express.static(UPLOADS_ROOT, { index: false }));
-// Serve frontend asset images/logo
 app.use('/assets', express.static(path.join(FRONTEND_DIR, 'assets'), { index: false }));
-// Serve all HTML pages, app.js, styles.css from project root
 app.use(express.static(FRONTEND_DIR, { index: 'index.html', extensions: ['html'] }));
 
-// 17. Fire up the engine and start listening for connections
+// 17. Start server
 app.listen(PORT, () => {
     console.log(`Server running smoothly with persistent database on port ${PORT}`);
 });
