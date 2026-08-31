@@ -473,10 +473,24 @@ app.get('/api/admin/inquiries', requireAuth, (req, res) => {
 });
 
 // ─── Static File Serving & Root Catch-All ─────────────────────────────────────
-app.use('/uploads', express.static(UPLOADS_ROOT, { index: false }));
-app.use(express.static(FRONTEND_DIR, { index: 'index.html' }));
 
-// Catch-all route to serve index.html for any frontend non-API request
+// 1. Serve uploaded files statically
+app.use('/uploads', express.static(UPLOADS_ROOT, { index: false }));
+
+// 2. Serve static frontend assets (CSS, JS, images)
+app.use(express.static(FRONTEND_DIR));
+
+// 3. Explicit route for Admin Portal
+app.get(['/admin', '/admin.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'admin.html'));
+});
+
+// 4. Explicit route for Homepage
+app.get(['/', '/index.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
+});
+
+// 5. Catch-all route for any remaining non-API request
 app.get('*', (req, res) => {
     if (req.path.startsWith('/api')) {
         return res.status(404).json({ success: false, message: 'API route not found.' });
