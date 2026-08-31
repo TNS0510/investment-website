@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Global Capital - Transaction Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col">
+
+    <!-- Global Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Brand Logo Link: Fixed to route back to homepage -->
+                 <!-- Logo Section inside strategy.html -->
+<a href="index.html" class="flex items-center space-x-3">
+    <img src="assets/images/logo.png" 
+         alt="Alliance Global Capital Logo" 
+         class="h-12 w-auto object-contain" 
+         onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+    <div class="hidden bg-[#D97706] text-white font-black px-3 py-1.5 rounded text-base tracking-tighter shadow-sm">
+        AGC
+    </div>
+    <span class="text-[10px] uppercase tracking-widest font-semibold text-slate-400 block -mt-1">Transaction Portal</span>
+    </span>
+</a>
+               
+                <!-- Navigation Actions: Linked back to homepage locations -->
+                <div class="flex items-center gap-4 text-xs font-semibold text-slate-600">
+                    <a href="index.html" class="hover:text-slate-900 px-1 py-5 transition-colors">Home</a>
+                    <a href="#" class="text-slate-900 border-b-2 border-slate-900 px-1 py-5">Workspace</a>
+                
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Workspace Layout -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Sidebar Navigation Controller -->
+            <aside class="lg:col-span-3 space-y-2">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-3">Available Desks</p>
+                
+                <button id="btn-yieldmax" class="w-full text-left px-4 py-3 rounded text-xs font-bold transition-all bg-slate-900 text-white shadow-sm flex items-center justify-between group">
+                    <span>YIELDMAX System</span>
+                    <span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded tracking-wide font-semibold">Active Asset</span>
+                </button>
+                
+                <button id="btn-loan" class="w-full text-left px-4 py-3 rounded text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60 flex items-center justify-between group">
+                    <span>Institutional Loan Desk</span>
+                    <span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded tracking-wide font-semibold">Credit Facility</span>
+                </button>
+            </aside>
+
+            <!-- Active Content Section -->
+            <section class="lg:col-span-9">
+                
+                <!-- PANEL A: YIELDMAX SYSTEM (YIELDINVEST DETAILS DESIGN) -->
+                <div id="panel-yieldmax" class="bg-white border border-slate-200 rounded p-6 shadow-sm space-y-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Fill the form below to get started</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Fields marked with an <span class="text-red-500">*</span> are required</p>
+                    </div>
+                    <!-- YIELDMAX Product Summary Card -->
+<div class="bg-white border border-slate-200 rounded-lg p-6 mb-6">
+    <!-- Product Banner Image Placeholder -->
+    <div class="w-full h-48 bg-slate-100 rounded-md mb-4 overflow-hidden flex items-center justify-center border border-slate-200">
+        <!-- Replace the src attribute below with your local dashboard image path when ready -->
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" alt="YieldMax Dashboard Preview" class="w-full h-full object-cover">
+    </div>
+
+    <!-- Product Header Title -->
+    <h2 class="text-xl font-extrabold text-slate-950 tracking-tight uppercase mb-2">YieldMax</h2>
+    
+    <!-- Short Context Description -->
+    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+        YieldMax is an investment product with high returns. Invest a minimum of <strong>₦500,000</strong> for <strong>180 days</strong> and get high returns on your investment.
+    </p>
+
+    <!-- Key Features Highlight Box -->
+    <div class="bg-slate-50 border border-slate-150 rounded p-4">
+        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Features</span>
+        <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside pl-1">
+            <li>Investment tenure is a minimum of 180 days</li>
+            <li>Earn attractive rates per annum on investment</li>
+            <li>Minimum investment of ₦500,000</li>
+            <li>Terms and conditions applies</li>
+        </ul>
+    </div>
+</div>
+                    <form id="yieldmaxForm" class="space-y-6">
+                        <!-- Personal Information Block -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">Personal Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Title <span class="text-red-500">*</span></label>
+                                    <input type="text" name="title" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900" placeholder="Mr/Mrs/Dr/Engr/Chief/etc">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Surname <span class="text-red-500">*</span></label>
+                                    <input type="text" name="surname"required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">First Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="firstname"  required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Other Name</label>
+                                    <input type="text" name="othername" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Gender <span class="text-red-500">*</span></label>
+                                    <select name="gender" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                                    <input type="date" name="dob" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Phone number <span class="text-red-500">*</span></label>
+                                    <input type="tel" name="phone" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Email <span class="text-red-500">*</span></label>
+                                    <input type="email" name="email" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Contact Address <span class="text-red-500">*</span></label>
+                                    <textarea name="address" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900" placeholder="Kindly note that P. O. Box Numbers and C/O addresses are not acceptable for security reasons."></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">NIN <span class="text-red-500">*</span></label>
+                                    <input type="text" name="nin" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">BVN <span class="text-red-500">*</span></label>
+                                    <input type="text" name="bvn" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div class="md:col-span-2 flex items-center gap-4 bg-slate-50 p-3 border border-slate-200 rounded">
+                                    <span class="text-xs font-bold text-slate-700">Upload Passport Photo Here <span class="text-red-500">*</span></span>
+                                    <input type="file" name="passportPhoto" required class="text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-white hover:file:bg-slate-700 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Next of Kin Block -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-1">Next of Kin Information</h3>
+                            <p class="text-[10px] text-slate-400 italic mb-4">(Must be above 18 years old)</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Surname <span class="text-red-500">*</span></label>
+                                    <input type="text" name="nextofkin_surname" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">First Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="nextofkin_firstname" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Other Name</label>
+                                    <input type="text" name="nextofkin_othername" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Phone <span class="text-red-500">*</span></label>
+                                    <input type="tel" name="nextOfKinPhone" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Relationship <span class="text-red-500">*</span></label>
+                                    <select name="nextOfKinRelationship" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                        <option>Brother</option>
+                                        <option>Sister</option>
+                                        <option>Spouse</option>
+                                        <option>Parent</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Contact Address <span class="text-red-500">*</span></label>
+                                    <textarea name="nextOfKinAddress" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900" placeholder="Kindly note that P. O. Box Numbers and C/O addresses are not acceptable for security reasons."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Asset Specific Workspace Details -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">YIELDINVEST DETAILS</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Start Date <span class="text-red-500">*</span></label>
+                                    <input type="date" name="investStartDate" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Account Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="bankAccountName" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Tenure <span class="text-red-500">*</span></label>
+                                    <input type="text" name="investTenure" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900" placeholder="Minimum of 180 Days">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Account No <span class="text-red-500">*</span></label>
+                                    <input type="text" name="bankAccountNumber" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Amount (₦) <span class="text-red-500">*</span></label>
+                                    <input type="number" name="investAmount" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Source of Funds <span class="text-red-500">*</span></label>
+                                    <input type="text" name="sourceOfFunds" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Bank Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="bankName" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Labeled Custom Vault Upload Nodes -->
+                        <div class="border-t border-dashed border-slate-200 pt-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Verification Vault (4 Custom Files Required)</h3>
+                            <p class="text-[11px] text-slate-500 mb-4">Please type a descriptive title for each upload box so compliance analysts know exactly what document is enclosed.</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="p-3 bg-slate-50 border border-slate-200 rounded flex flex-col gap-2">
+                                    <input type="text" name="doc1Label" required class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs font-semibold focus:outline-none focus:border-slate-900" placeholder="1. Name of Document (e.g., Passport)">
+                                    <input type="file" name="doc1File" required class="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                </div>
+                                <div class="p-3 bg-slate-50 border border-slate-200 rounded flex flex-col gap-2">
+                                    <input type="text" name="doc2Label" required class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs font-semibold focus:outline-none focus:border-slate-900" placeholder="2. Name of Document (e.g., Tax Slip)">
+                                    <input type="file" name="doc2File" required class="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                </div>
+                                <div class="p-3 bg-slate-50 border border-slate-200 rounded flex flex-col gap-2">
+                                    <input type="text" name="doc3Label" required class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs font-semibold focus:outline-none focus:border-slate-900" placeholder="3. Name of Document (e.g., Reference Letter)">
+                                    <input type="file" name="doc3File" required class="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                </div>
+                                <div class="p-3 bg-slate-50 border border-slate-200 rounded flex flex-col gap-2">
+                                    <input type="text" name="doc4Label" required class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs font-semibold focus:outline-none focus:border-slate-900" placeholder="4. Name of Document (e.g., Bank Proof)">
+                                    <input type="file" name="doc4File" required class="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms & Conditions Declaration Block -->
+                        <div class="border-t border-slate-200 pt-4 space-y-4">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Declaration</h3>
+                            <div class="flex items-start gap-2">
+                                <input type="checkbox" id="yieldmax-declare" required class="mt-1 accent-slate-900">
+                                <label for="yieldmax-declare" class="text-xs text-slate-700 font-medium leading-relaxed">
+                                    At maturity, kindly transfer total investment to my account details above. I/We confirm that I/We have read, understand and agreed to the stated terms and conditions. <span class="text-red-500">*</span>
+                                </label>
+                            </div>
+                            <div class="bg-slate-50 p-4 border border-slate-200 rounded text-xs space-y-2 text-slate-600">
+                                <p class="font-bold text-slate-800">Terms and Conditions of YEIDEinvest</p>
+                                <ul class="list-disc pl-4 space-y-1">
+                                    <li>Kindly note that in the event of a partial or full liquidation of investment before maturity, a notice of 10 working days should be given in writing.</li>
+                                    <li>Default charge – 25% of accrued interest for withdrawals made before maturity.</li>
+                                    <li>The balance of the initial investment in the case of a partial liquidation would constitute a new contract and shall be subject to a new rate and tenure.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Recaptcha Sandbox Row -->
+                        <div class="bg-slate-50 border border-slate-200 rounded p-3 max-w-xs flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" required class="w-4 h-4 accent-slate-900">
+                                <span class="text-xs text-slate-700 font-medium">I'm not a robot</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-0.5"></div>
+                                <span class="text-[8px] text-slate-400 block uppercase font-bold tracking-tighter">reCAPTCHA</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-6 py-2.5 rounded transition-all uppercase tracking-wide">Submit Application</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- PANEL B: INSTITUTIONAL LOAN DESK -->
+                <div id="panel-loan" class="bg-white border border-slate-200 rounded p-6 shadow-sm space-y-6 hidden">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Apply for a Loan</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Fill the form below to apply for an instant loan of your choice.</p>
+                        <p class="text-xs text-slate-400 mt-1">Fields marked with an <span class="text-red-500">*</span> are required</p>
+                    </div>
+                    <!-- INSTITUTIONAL LOAN DESK Product Summary Card -->
+<div class="bg-white border border-slate-200 rounded-lg p-6 mb-6">
+    <!-- Credit Desk Image Placeholder -->
+    <div class="w-full h-48 bg-slate-100 rounded-md mb-4 overflow-hidden flex items-center justify-center border border-slate-200">
+        <!-- Replace the src attribute below with your local office/credit image path when ready -->
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800" alt="Institutional Credit Facility Desk" class="w-full h-full object-cover">
+    </div>
+
+    <!-- Product Header Title -->
+    <h2 class="text-xl font-extrabold text-slate-950 tracking-tight uppercase mb-2">Institutional Loan Desk</h2>
+    
+    <!-- Short Context Description with Dedicated Email -->
+    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+        Access customized wholesale liquidity configurations, structured asset-backed lending, and bespoke corporate financing. For specialized underwriting or direct partnership inquiries, contact our dedicated desk at <a href="mailto:credit@allianceglobal.com" class="text-blue-600 font-semibold hover:underline">credit@allianceglobal.com</a>.
+    </p>
+
+    <!-- Key Credit Features Highlight Box -->
+    <div class="bg-slate-50 border border-slate-150 rounded p-4">
+        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Credit Facility Terms</span>
+        <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside pl-1">
+            <li>Flexible repayment structures tailored to institutional cash flow cycles</li>
+            <li>Competitive interest rates determined via dynamic risk assessment</li>
+            <li>Bespoke capital allocations starting from ₦10,000,000 and above</li>
+            <li>Comprehensive asset-backed and structured security options available</li>
+        </ul>
+    </div>
+</div>
+                    <form id="loanForm" class="space-y-6">
+                        <!-- Loan Config Selector -->
+                        <div class="max-w-md">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Loan Type <span class="text-red-500">*</span></label>
+                            <select name="loanType" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                <option>AGC Lending</option>
+                                <option>SME Asset Financing</option>
+                                <option>Working Capital Facility</option>
+                            </select>
+                        </div>
+
+                        <!-- Personal Information Block -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">Personal Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Surname <span class="text-red-500">*</span></label>
+                                    <input type="text" name="surname" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Middle Name</label>
+                                    <input type="text" name="middleName" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">First Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="firstName" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Email <span class="text-red-500">*</span></label>
+                                    <input type="email" name="email" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Gender <span class="text-red-500">*</span></label>
+                                    <select name="gender" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">BVN <span class="text-red-500">*</span></label>
+                                    <input type="text" name="bvn" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">NIN <span class="text-red-500">*</span></label>
+                                    <input type="text" name="nin" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Details -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">Contact Details</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Home Address <span class="text-red-500">*</span></label>
+                                    <textarea name="homeAddress" required rows="2" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Home Telephone</label>
+                                    <input type="tel" name="homeTelephone" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Mobile number <span class="text-red-500">*</span></label>
+                                    <input type="tel" name="mobile" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Professional Details -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">Professional Details</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Place of Work <span class="text-red-500">*</span></label>
+                                    <input type="text" name="employer" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Position Held <span class="text-red-500">*</span></label>
+                                    <input type="text" name="jobTitle" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Are you confirmed? <span class="text-red-500">*</span></label>
+                                    <select name="employmentStatus" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                        <option>Confirmed</option>
+                                        <option>Probation</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Next of Kin Block -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">Next of Kin</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">First Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="nextOfKinFirstName" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Last Name <span class="text-red-500">*</span></label>
+                                    <input type="text" name="nextOfKinLastName" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Relationship <span class="text-red-500">*</span></label>
+                                    <select name="nextOfKinRelationship" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                        <option>Brother</option>
+                                        <option>Sister</option>
+                                        <option>Spouse</option>
+                                        <option>Parent</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Phone <span class="text-red-500">*</span></label>
+                                    <input type="tel" name="nextOfKinPhone" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Address</label>
+                                    <textarea name="nextOfKinAddress" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transaction Metrics & Documents Block -->
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4">Transaction Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Amount <span class="text-red-500">*</span></label>
+                                    <input type="number" name="loanAmount" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Date</label>
+                                    <input type="date" name="loanDate" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Net Monthly Income <span class="text-red-500">*</span></label>
+                                    <input type="number" name="monthlyIncome" required class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Purpose <span class="text-red-500">*</span></label>
+                                    <textarea name="loanPurpose" required rows="3" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-slate-900"></textarea>
+                                </div>
+
+                                <!-- REQUIRED FILE UPLOADS: CAC, NEPA, NIN, OTHER -->
+                                <div class="md:col-span-2 border-t border-dashed border-slate-200 pt-4 mt-2">
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Required Facility Verification Attachments</p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-1">CAC Incorporation Documents <span class="text-red-500">*</span></label>
+                                            <input type="file" name="fileCac" required class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Recent Utility Bill (NEPA Bill) <span class="text-red-500">*</span></label>
+                                            <input type="file" name="fileNepa" required class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-1">National Identity Slip (NIN Slip) <span class="text-red-500">*</span></label>
+                                            <input type="file" name="fileNin" required class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-1">Supplemental Supporting Assets (Other)</label>
+                                            <input type="file" name="fileSupplemental" class="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1.5 text-xs text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-sm file:border-0 file:text-[10px] file:font-bold file:uppercase file:bg-slate-900 file:text-white hover:file:bg-slate-800 cursor-pointer">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recaptcha Sandbox Row -->
+                        <div class="bg-slate-50 border border-slate-200 rounded p-3 max-w-xs flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" required class="w-4 h-4 accent-slate-900">
+                                <span class="text-xs text-slate-700 font-medium">I'm not a robot</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-0.5"></div>
+                                <span class="text-[8px] text-slate-400 block uppercase font-bold tracking-tighter">reCAPTCHA</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-6 py-2.5 rounded transition-all uppercase tracking-wide">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+   <!-- Global Client Router Script -->
+<script>
+    // Handles toggling between the YIELDMAX view and the Loan view
+    function switchTab(target) {
+        const panelYield = document.getElementById('panel-yieldmax');
+        const panelLoan  = document.getElementById('panel-loan');
+        const btnYield   = document.getElementById('btn-yieldmax');
+        const btnLoan    = document.getElementById('btn-loan');
+
+        if (target === 'yieldmax') {
+            panelYield.classList.remove('hidden');
+            panelLoan.classList.add('hidden');
+            btnYield.className = "w-full text-left px-4 py-3 rounded text-xs font-bold transition-all bg-slate-900 text-white shadow-sm flex items-center justify-between group";
+            btnLoan.className  = "w-full text-left px-4 py-3 rounded text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60 flex items-center justify-between group";
+        } else {
+            panelYield.classList.add('hidden');
+            panelLoan.classList.remove('hidden');
+            btnLoan.className  = "w-full text-left px-4 py-3 rounded text-xs font-bold transition-all bg-slate-900 text-white shadow-sm flex items-center justify-between group";
+            btnYield.className = "w-full text-left px-4 py-3 rounded text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60 flex items-center justify-between group";
+        }
+    }
+
+    // Wire tab buttons via addEventListener (CSP-safe: avoids inline onclick attributes)
+    document.getElementById('btn-yieldmax').addEventListener('click', function() { switchTab('yieldmax'); });
+    document.getElementById('btn-loan').addEventListener('click', function() { switchTab('loan'); });
+
+    // Resolve API base: in production the backend is on the same origin; in local dev use localhost:5000
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5000'
+        : window.location.origin;
+
+    // YIELDMAX Form — submit to /api/submit/yieldmax
+    const yieldmaxForm = document.getElementById('yieldmaxForm');
+
+    if (yieldmaxForm) {
+        yieldmaxForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(yieldmaxForm);
+
+            fetch(`${API_BASE}/api/submit/yieldmax`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Your YieldMax application has been submitted successfully. Our team will be in touch shortly.');
+                    yieldmaxForm.reset();
+                } else {
+                    alert('Submission error: ' + (data.message || 'Please try again.'));
+                }
+            })
+            .catch(error => {
+                console.error('Network Error:', error);
+                alert('Could not reach the server. Please ensure the backend is running and try again.');
+            });
+        });
+    }
+
+    // Loan Desk Form — submit to /api/submit/loan
+    const loanForm = document.getElementById('loanForm');
+
+    if (loanForm) {
+        loanForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(loanForm);
+
+            fetch(`${API_BASE}/api/submit/loan`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Your loan application has been submitted successfully. Our credit team will review and contact you shortly.');
+                    loanForm.reset();
+                } else {
+                    alert('Submission error: ' + (data.message || 'Please try again.'));
+                }
+            })
+            .catch(error => {
+                console.error('Network Error:', error);
+                alert('Could not reach the server. Please ensure the backend is running and try again.');
+            });
+        });
+    }
+</script>
+</body>
+</html>

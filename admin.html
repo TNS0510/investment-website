@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Global Capital — Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
+
+    <!-- ── Login Panel ──────────────────────────────────────────────────────── -->
+    <div id="loginPanel" class="hidden min-h-screen flex items-center justify-center px-4">
+        <div class="w-full max-w-sm bg-white border border-slate-200 rounded-lg shadow-sm p-8">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="bg-slate-950 text-white font-black px-2.5 py-1 rounded text-sm tracking-tighter">AG</div>
+                <div>
+                    <p class="text-xs font-black uppercase tracking-wider text-slate-900 leading-none">Alliance Global Capital</p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Internal Control Desk</p>
+                </div>
+            </div>
+            <h2 class="text-lg font-black text-slate-950 mb-1">Administrator Sign In</h2>
+            <p class="text-xs text-slate-400 mb-6">Enter your credentials to access the dashboard.</p>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Username</label>
+                    <input id="loginUsername" type="text" autocomplete="username" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-slate-900 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Password</label>
+                    <input id="loginPassword" type="password" autocomplete="current-password" required
+                        class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-slate-900 transition-colors">
+                </div>
+                <p id="loginError" class="hidden text-xs text-red-600 font-semibold bg-red-50 border border-red-200 rounded px-3 py-2"></p>
+                <button type="submit" id="loginBtn"
+                    class="w-full bg-slate-950 hover:bg-slate-800 text-white font-bold py-2.5 rounded text-sm tracking-wider uppercase transition-colors">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── Dashboard Panel ──────────────────────────────────────────────────── -->
+    <div id="dashboardPanel" class="hidden">
+
+        <!-- Top Navigation -->
+        <header class="bg-slate-950 text-white shadow-sm sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white text-slate-950 font-black px-2.5 py-1 rounded text-sm tracking-tighter">AG</div>
+                    <div>
+                        <h1 class="text-sm font-black uppercase tracking-wider leading-none">Alliance Global Capital</h1>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Internal Control Desk</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="products.html" class="text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded transition">
+                        Workspace
+                    </a>
+                    <button id="logoutBtn"
+                        class="text-xs font-semibold bg-red-900 hover:bg-red-800 text-red-100 px-4 py-2 rounded transition">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-6 py-8">
+
+            <!-- Page Title -->
+            <div class="mb-6">
+                <h2 class="text-2xl font-black text-slate-950 tracking-tight">Incoming Applications</h2>
+                <p class="text-xs text-slate-500 mt-1">Review investment registrations, loan applications, and general inquiries.</p>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="flex gap-1 mb-6 border-b border-slate-200">
+                <button data-tab="yieldmax"
+                    class="tab-btn px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-t border-b-2 border-slate-900 text-slate-900 bg-white -mb-px">
+                    YIELDMAX
+                </button>
+                <button data-tab="loans"
+                    class="tab-btn px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-t border-b-2 border-transparent text-slate-500 hover:text-slate-700 bg-transparent transition-colors">
+                    Loan Applications
+                </button>
+                <button data-tab="inquiries"
+                    class="tab-btn px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-t border-b-2 border-transparent text-slate-500 hover:text-slate-700 bg-transparent transition-colors">
+                    Inquiries
+                </button>
+            </div>
+
+            <!-- YIELDMAX Tab -->
+            <div id="tab-yieldmax" class="tab-panel">
+                <div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-4 py-3.5">Date</th>
+                                    <th class="px-4 py-3.5">Client Name</th>
+                                    <th class="px-4 py-3.5">Email</th>
+                                    <th class="px-4 py-3.5">Phone</th>
+                                    <th class="px-4 py-3.5">Amount (₦)</th>
+                                    <th class="px-4 py-3.5">Tenure</th>
+                                    <th class="px-4 py-3.5">Documents</th>
+                                    <th class="px-4 py-3.5">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="yieldmaxTableBody" class="divide-y divide-slate-100 text-xs text-slate-700">
+                                <tr id="yieldmaxLoading">
+                                    <td colspan="8" class="px-6 py-10 text-center text-slate-400 italic">Loading YIELDMAX applications...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loans Tab -->
+            <div id="tab-loans" class="tab-panel hidden">
+                <div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-4 py-3.5">Date</th>
+                                    <th class="px-4 py-3.5">Client Name</th>
+                                    <th class="px-4 py-3.5">Email</th>
+                                    <th class="px-4 py-3.5">Mobile</th>
+                                    <th class="px-4 py-3.5">Amount (₦)</th>
+                                    <th class="px-4 py-3.5">Loan Type</th>
+                                    <th class="px-4 py-3.5">Documents</th>
+                                    <th class="px-4 py-3.5">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loansTableBody" class="divide-y divide-slate-100 text-xs text-slate-700">
+                                <tr id="loansLoading">
+                                    <td colspan="8" class="px-6 py-10 text-center text-slate-400 italic">Loading loan applications...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inquiries Tab -->
+            <div id="tab-inquiries" class="tab-panel hidden">
+                <div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <th class="px-4 py-3.5">Date</th>
+                                    <th class="px-4 py-3.5">Full Name</th>
+                                    <th class="px-4 py-3.5">Email</th>
+                                    <th class="px-4 py-3.5">Inquiry Type</th>
+                                    <th class="px-4 py-3.5">Message</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inquiriesTableBody" class="divide-y divide-slate-100 text-xs text-slate-700">
+                                <tr id="inquiriesLoading">
+                                    <td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">Loading inquiries...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+    // ── Constants ──────────────────────────────────────────────────────────────
+    // Resolve API base: same-origin in production, localhost:5000 in local dev
+    const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5000'
+        : window.location.origin;
+    const TOKEN_KEY  = 'agc_admin_token';
+    const STATUS_CLS = {
+        Approved: 'status-updater text-[11px] font-bold uppercase tracking-wider rounded border px-2.5 py-1 bg-emerald-50 text-emerald-700 border-emerald-300 focus:outline-none transition',
+        Declined: 'status-updater text-[11px] font-bold uppercase tracking-wider rounded border px-2.5 py-1 bg-rose-50 text-rose-700 border-rose-300 focus:outline-none transition',
+        Pending:  'status-updater text-[11px] font-bold uppercase tracking-wider rounded border px-2.5 py-1 bg-white text-slate-700 border-slate-300 focus:outline-none transition'
+    };
+
+    // ── Helpers ────────────────────────────────────────────────────────────────
+
+    function getToken() {
+        return localStorage.getItem(TOKEN_KEY);
+    }
+
+    // Decode expiry from base64url payload without verifying signature (client-side preview only)
+    function tokenExpired(token) {
+        try {
+            const payload = token.split('.')[0];
+            const { exp } = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+            return typeof exp !== 'number' || Date.now() >= exp;
+        } catch {
+            return true;
+        }
+    }
+
+    function authHeaders() {
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getToken()}`
+        };
+    }
+
+    // Handle 401 globally — clear token and return to login
+    async function apiFetch(url, options = {}) {
+        const res = await fetch(url, options);
+        if (res.status === 401) {
+            logout();
+            return null;
+        }
+        return res;
+    }
+
+    function statusDropdown(id, current, patchEndpoint) {
+        const cls = STATUS_CLS[current] || STATUS_CLS.Pending;
+        return `
+            <select data-id="${id}" data-endpoint="${patchEndpoint}"
+                class="${cls}">
+                <option value="Pending"  ${current === 'Pending'  ? 'selected' : ''}>Pending Review</option>
+                <option value="Approved" ${current === 'Approved' ? 'selected' : ''}>Approved</option>
+                <option value="Declined" ${current === 'Declined' ? 'selected' : ''}>Declined</option>
+            </select>`;
+    }
+
+    function fileLink(path, label) {
+        if (!path) return '<span class="text-slate-300">—</span>';
+        return `<a href="${API}/${path}" target="_blank" rel="noopener"
+            class="text-blue-600 hover:underline font-medium">${label}</a>`;
+    }
+
+    function emptyRow(cols, msg) {
+        return `<tr><td colspan="${cols}" class="px-6 py-10 text-center text-slate-400 italic">${msg}</td></tr>`;
+    }
+
+    function errorRow(cols) {
+        return `<tr><td colspan="${cols}" class="px-6 py-10 text-center text-red-500 font-semibold bg-red-50">
+            Could not load data. Verify the backend is running on port 5000.
+        </td></tr>`;
+    }
+
+    // ── Panel Switching ────────────────────────────────────────────────────────
+
+    function showLogin() {
+        document.getElementById('loginPanel').classList.remove('hidden');
+        document.getElementById('dashboardPanel').classList.add('hidden');
+        document.getElementById('loginError').classList.add('hidden');
+        document.getElementById('loginUsername').value = '';
+        document.getElementById('loginPassword').value = '';
+    }
+
+    function showDashboard() {
+        document.getElementById('loginPanel').classList.add('hidden');
+        document.getElementById('dashboardPanel').classList.remove('hidden');
+    }
+
+    function logout() {
+        localStorage.removeItem(TOKEN_KEY);
+        showLogin();
+    }
+
+    // ── Tab Switching ──────────────────────────────────────────────────────────
+
+    let activeTab     = null;
+    const loadedTabs  = new Set();
+
+    function switchTab(name) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById(`tab-${name}`).classList.remove('hidden');
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            const isActive = btn.dataset.tab === name;
+            btn.classList.toggle('border-slate-900', isActive);
+            btn.classList.toggle('text-slate-900',   isActive);
+            btn.classList.toggle('bg-white',         isActive);
+            btn.classList.toggle('-mb-px',           isActive);
+            btn.classList.toggle('border-transparent', !isActive);
+            btn.classList.toggle('text-slate-500',     !isActive);
+            btn.classList.toggle('bg-transparent',     !isActive);
+        });
+
+        activeTab = name;
+        if (!loadedTabs.has(name)) {
+            loadedTabs.add(name);
+            TAB_LOADERS[name]();
+        }
+    }
+
+    // ── Row Renderers ──────────────────────────────────────────────────────────
+
+    function renderYieldmaxRow(app) {
+        const name = `${app.title || ''} ${app.firstname || ''} ${app.othername || ''} ${app.surname || ''}`.trim() || '—';
+        const docs = [
+            fileLink(app.passportPhotoPath, 'Passport'),
+            fileLink(app.doc1FilePath, app.doc1Label || 'Doc 1'),
+            fileLink(app.doc2FilePath, app.doc2Label || 'Doc 2'),
+            fileLink(app.doc3FilePath, app.doc3Label || 'Doc 3'),
+            fileLink(app.doc4FilePath, app.doc4Label || 'Doc 4'),
+        ].filter(l => !l.includes('text-slate-300')).join(' &middot; ') || '<span class="text-slate-300">—</span>';
+
+        return `<tr class="hover:bg-slate-50 transition border-b border-slate-100">
+            <td class="px-4 py-3.5 font-mono text-[11px] text-slate-500 whitespace-nowrap">${new Date(app.submitted_at).toLocaleString()}</td>
+            <td class="px-4 py-3.5 font-semibold text-slate-900 whitespace-nowrap">${name}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.email || '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.phone || '—'}</td>
+            <td class="px-4 py-3.5 font-mono text-slate-700">${app.investAmount != null ? Number(app.investAmount).toLocaleString() : '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.investTenure || '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600 space-y-0.5">${docs}</td>
+            <td class="px-4 py-3.5 whitespace-nowrap">${statusDropdown(app.id, app.status || 'Pending', '/api/admin/yieldmax')}</td>
+        </tr>`;
+    }
+
+    function renderLoanRow(app) {
+        const name = `${app.firstName || ''} ${app.middleName || ''} ${app.surname || ''}`.trim() || '—';
+        const docs = [
+            fileLink(app.fileCacPath,          'CAC'),
+            fileLink(app.fileNepaPath,         'Utility Bill'),
+            fileLink(app.fileNinPath,          'NIN Slip'),
+            fileLink(app.fileSupplementalPath, 'Supplemental'),
+        ].filter(l => !l.includes('text-slate-300')).join(' &middot; ') || '<span class="text-slate-300">—</span>';
+
+        return `<tr class="hover:bg-slate-50 transition border-b border-slate-100">
+            <td class="px-4 py-3.5 font-mono text-[11px] text-slate-500 whitespace-nowrap">${new Date(app.submitted_at).toLocaleString()}</td>
+            <td class="px-4 py-3.5 font-semibold text-slate-900 whitespace-nowrap">${name}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.email || '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.mobile || '—'}</td>
+            <td class="px-4 py-3.5 font-mono text-slate-700">${app.loanAmount != null ? Number(app.loanAmount).toLocaleString() : '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.loanType || '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600 space-y-0.5">${docs}</td>
+            <td class="px-4 py-3.5 whitespace-nowrap">${statusDropdown(app.id, app.status || 'Pending', '/api/admin/loans')}</td>
+        </tr>`;
+    }
+
+    function renderInquiryRow(app) {
+        const msg = app.message
+            ? `<span title="${app.message.replace(/"/g, '&quot;')}" class="cursor-help underline decoration-dotted">${app.message.slice(0, 80)}${app.message.length > 80 ? '…' : ''}</span>`
+            : '—';
+        return `<tr class="hover:bg-slate-50 transition border-b border-slate-100">
+            <td class="px-4 py-3.5 font-mono text-[11px] text-slate-500 whitespace-nowrap">${new Date(app.submitted_at).toLocaleString()}</td>
+            <td class="px-4 py-3.5 font-semibold text-slate-900 whitespace-nowrap">${app.fullName || '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.email || '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600">${app.inquiryType || '—'}</td>
+            <td class="px-4 py-3.5 text-slate-600 max-w-xs">${msg}</td>
+        </tr>`;
+    }
+
+    // ── Tab Data Loaders ───────────────────────────────────────────────────────
+
+    async function loadYieldmax() {
+        const tbody = document.getElementById('yieldmaxTableBody');
+        const res = await apiFetch(`${API}/api/admin/yieldmax`, { headers: authHeaders() });
+        if (!res) return;
+        const rows = await res.json();
+        tbody.innerHTML = rows.length
+            ? rows.map(renderYieldmaxRow).join('')
+            : emptyRow(8, 'No YIELDMAX applications found.');
+    }
+
+    async function loadLoans() {
+        const tbody = document.getElementById('loansTableBody');
+        const res = await apiFetch(`${API}/api/admin/loans`, { headers: authHeaders() });
+        if (!res) return;
+        const rows = await res.json();
+        tbody.innerHTML = rows.length
+            ? rows.map(renderLoanRow).join('')
+            : emptyRow(8, 'No loan applications found.');
+    }
+
+    async function loadInquiries() {
+        const tbody = document.getElementById('inquiriesTableBody');
+        const res = await apiFetch(`${API}/api/admin/inquiries`, { headers: authHeaders() });
+        if (!res) return;
+        const rows = await res.json();
+        tbody.innerHTML = rows.length
+            ? rows.map(renderInquiryRow).join('')
+            : emptyRow(5, 'No inquiries found.');
+    }
+
+    const TAB_LOADERS = {
+        yieldmax:  loadYieldmax,
+        loans:     loadLoans,
+        inquiries: loadInquiries
+    };
+
+    // ── Status Update — Event Delegation ──────────────────────────────────────
+
+    document.addEventListener('change', async (event) => {
+        const el = event.target;
+        if (!el.classList.contains('status-updater')) return;
+
+        const id       = el.dataset.id;
+        const endpoint = el.dataset.endpoint;
+        const status   = el.value;
+
+        const res = await apiFetch(`${API}${endpoint}/${id}`, {
+            method: 'PATCH',
+            headers: authHeaders(),
+            body: JSON.stringify({ status })
+        });
+        if (!res) return;
+
+        const result = await res.json();
+        if (result.success) {
+            el.className = STATUS_CLS[status] || STATUS_CLS.Pending;
+        } else {
+            alert('Failed to update status. Please try again.');
+        }
+    });
+
+    // ── Login Form ─────────────────────────────────────────────────────────────
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn   = document.getElementById('loginBtn');
+        const errEl = document.getElementById('loginError');
+        errEl.classList.add('hidden');
+        btn.textContent = 'Signing in…';
+        btn.disabled    = true;
+
+        try {
+            const res = await fetch(`${API}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: document.getElementById('loginUsername').value.trim(),
+                    password: document.getElementById('loginPassword').value
+                })
+            });
+            const data = await res.json();
+            if (data.success && data.token) {
+                localStorage.setItem(TOKEN_KEY, data.token);
+                showDashboard();
+                switchTab('yieldmax');
+            } else {
+                errEl.textContent = data.message || 'Invalid credentials.';
+                errEl.classList.remove('hidden');
+            }
+        } catch {
+            errEl.textContent = 'Cannot reach server. Ensure the backend is running on port 5000.';
+            errEl.classList.remove('hidden');
+        } finally {
+            btn.textContent = 'Sign In';
+            btn.disabled    = false;
+        }
+    });
+
+    // ── Tab Button Clicks ──────────────────────────────────────────────────────
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // ── Logout Button ──────────────────────────────────────────────────────────
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    // ── Startup: Check for existing valid token ────────────────────────────────
+
+    const existingToken = getToken();
+    if (existingToken && !tokenExpired(existingToken)) {
+        showDashboard();
+        switchTab('yieldmax');
+    } else {
+        localStorage.removeItem(TOKEN_KEY);
+        showLogin();
+    }
+    </script>
+</body>
+</html>

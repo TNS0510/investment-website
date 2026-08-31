@@ -1,0 +1,17 @@
+﻿# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Installed packages
+node_modules/
+
+# User-uploaded files (persisted on server volume, not in VCS)
+uploads/*
+# ...but keep the directory itself via a placeholder
+!uploads/.gitkeep
+
+# Server-side database
+*.db
+*.sqlite
+*.sqlite3
