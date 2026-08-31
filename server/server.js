@@ -480,7 +480,19 @@ app.use('/uploads', express.static(UPLOADS_ROOT, { index: false }));
 // 2. Serve static frontend assets (CSS, JS, images)
 app.use(express.static(FRONTEND_DIR));
 
-// 3. Explicit route for Admin Portal
+// 3. Explicit routes for Multi-Page HTML views
+app.get(['/about', '/about.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'about.html'));
+});
+
+app.get(['/strategy', '/strategy.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'strategy.html'));
+});
+
+app.get(['/products', '/products.html'], (req, res) => {
+    res.sendFile(path.join(FRONTEND_DIR, 'products.html'));
+});
+
 app.get(['/admin', '/admin.html'], (req, res) => {
     res.sendFile(path.join(FRONTEND_DIR, 'admin.html'));
 });
