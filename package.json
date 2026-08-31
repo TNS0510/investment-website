@@ -1,5 +1,5 @@
 {
-  "name": "alliance-global",
+  "name": "investment-website",
   "version": "1.0.0",
   "type": "module",
   "main": "server/server.js",
