@@ -5,23 +5,36 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Determine database path: Use /tmp in Vercel serverless environment, otherwise local folder
-const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
-const dbDir = isVercel ? '/tmp' : __dirname;
-const dbPath = path.join(dbDir, 'database.sqlite');
+// Bundled DB lives alongside this file in the deployed bundle
+const BUNDLED_DB = path.join(__dirname, 'alliance_global.db');
 
-// Ensure directory exists
-if (!fs.existsSync(dbDir)) {
-    fs.mkdirSync(dbDir, { recursive: true });
+// Determine database path:
+//   • Vercel / production: copy bundled DB into /tmp once per container lifetime,
+//     so the file is writable while reads and writes share the same instance.
+//   • Local dev: use the file in-place (writable, persists across restarts).
+const isVercel = !!(process.env.VERCEL || process.env.VERCEL_ENV);
+let dbPath;
+
+if (isVercel) {
+    dbPath = '/tmp/alliance_global.db';
+    // Copy the seed DB into /tmp only if it hasn't been placed there yet.
+    // This ensures schema + any pre-seeded rows are present on a cold start,
+    // and subsequent warm-invocation writes are visible within the same container.
+    if (!fs.existsSync(dbPath)) {
+        if (fs.existsSync(BUNDLED_DB)) {
+            fs.copyFileSync(BUNDLED_DB, dbPath);
+        }
+        // If the bundled file doesn't exist either, better-sqlite3 will create a fresh DB below.
+    }
+} else {
+    dbPath = BUNDLED_DB;
 }
 
 // Initialize SQLite database instance
 const db = new Database(dbPath);
 
-// Enable WAL mode for better concurrency performance locally
-if (!isVercel) {
-    db.pragma('journal_mode = WAL');
-}
+// WAL mode improves concurrent read performance; safe to enable everywhere.
+db.pragma('journal_mode = WAL');
 
 // Initialize Database Tables
 db.exec(`
