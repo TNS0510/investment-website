@@ -11,7 +11,7 @@
       "destination": "/server/uploads/$1"
     },
     {
-      "source": "/((?!api|uploads).*)",
+      "source": "/((?!api|uploads|assets|styles\\.css|app\\.js).*)",
       "destination": "/$1"
     }
   ]
