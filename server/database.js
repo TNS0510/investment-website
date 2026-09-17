@@ -11,12 +11,16 @@
  */
 
 import { createRequire } from 'module';
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require   = createRequire(import.meta.url);
+
+// On Vercel the project filesystem is read-only; only /tmp is writable.
+const IS_VERCEL  = !!(process.env.VERCEL || process.env.VERCEL_ENV);
+const WRITE_DIR  = IS_VERCEL ? '/tmp' : __dirname;
 
 // ─── SQLite schema & seed ────────────────────────────────────────────────────
 
@@ -121,13 +125,18 @@ function tryBetterSqlite3() {
 function buildSqlJsDb() {
     // sql.js stores everything in memory; we persist to a binary file manually.
     const initSqlJs = require('sql.js');
-    const dbPath    = path.join(__dirname, 'alliance_global_sqljs.bin');
+    const dbPath    = path.join(WRITE_DIR, 'alliance_global_sqljs.bin');
 
-    // initSqlJs returns a Promise — we use a synchronous-style wrapper via a
-    // shared state variable populated through a .then() that resolves before
-    // the Node.js event loop hands control back (possible because we await the
-    // module load in the top-level async IIFE below).
-    return initSqlJs().then(SQL => {
+    // On Vercel, locate the pre-compiled WASM file that ships inside the
+    // sql.js npm package so the runtime doesn't try to fetch it over HTTP.
+    const wasmPath  = path.join(
+        __dirname, 'node_modules', 'sql.js', 'dist', 'sql-wasm.wasm'
+    );
+    const sqlJsConfig = existsSync(wasmPath)
+        ? { locateFile: () => wasmPath }
+        : {};
+
+    return initSqlJs(sqlJsConfig).then(SQL => {
         let db;
         if (existsSync(dbPath)) {
             const fileBuffer = readFileSync(dbPath);
