@@ -194,7 +194,11 @@
     function tokenExpired(token) {
         try {
             const payload = token.split('.')[0];
-            const { exp } = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+            // Convert base64url → standard base64, then restore padding that
+            // b64url() strips. atob() requires padded standard base64.
+            const b64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+            const padded = b64 + '=='.slice(0, (4 - b64.length % 4) % 4);
+            const { exp } = JSON.parse(atob(padded));
             return typeof exp !== 'number' || Date.now() >= exp;
         } catch {
             return true;

@@ -503,7 +503,7 @@ app.get(['/', '/index.html'], (req, res) => {
 });
 
 // 5. Catch-all route for any remaining non-API request
-app.get('*', (req, res) => {
+app.get('/{*any}', (req, res) => {
     if (req.path.startsWith('/api')) {
         return res.status(404).json({ success: false, message: 'API route not found.' });
     }
